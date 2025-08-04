@@ -11,7 +11,7 @@ describe('Scan routes', () => {
   describe('POST /v1/scan', () => {
     test('should return 201 and successfully create scan if data is ok', async () => {
       const res = await request(app)
-        .post('/v1/scan')
+        .post('/scan')
         .send({
           urls: ['https://example.com'],
         })
@@ -41,7 +41,7 @@ describe('Scan routes', () => {
 
     test('should return 400 error if urls is invalid', async () => {
       const res = await request(app)
-        .post('/v1/scan')
+        .post('/scan')
         .send({
           urls: ['invalid-url'],
         })
@@ -52,7 +52,7 @@ describe('Scan routes', () => {
 
     test('should return 400 error if urls array is empty', async () => {
       const res = await request(app)
-        .post('/v1/scan')
+        .post('/scan')
         .send({
           urls: [],
         })
@@ -67,7 +67,7 @@ describe('Scan routes', () => {
       await Scan.insertMany([scanOne, scanTwo]);
 
       const res = await request(app)
-        .get('/v1/scan')
+        .get('/scan')
         .send()
         .expect(httpStatus.OK);
 
@@ -98,7 +98,7 @@ describe('Scan routes', () => {
       await Scan.insertMany([scanOne, scanTwo]);
 
       const res = await request(app)
-        .get('/v1/scan')
+        .get('/scan')
         .query({ status: 'completed' })
         .send()
         .expect(httpStatus.OK);
@@ -120,7 +120,7 @@ describe('Scan routes', () => {
       const scan = await Scan.create(scanOne);
 
       const res = await request(app)
-        .get(`/v1/scan/${scan.id}`)
+        .get(`/scan/${scan.id}`)
         .send()
         .expect(httpStatus.OK);
 
@@ -141,7 +141,7 @@ describe('Scan routes', () => {
 
     test('should return 400 error if scanId is invalid', async () => {
       const res = await request(app)
-        .get('/v1/scan/invalidId')
+        .get('/scan/invalidId')
         .send()
         .expect(httpStatus.BAD_REQUEST);
 
@@ -150,7 +150,7 @@ describe('Scan routes', () => {
 
     test('should return 404 error if scan is not found', async () => {
       const res = await request(app)
-        .get('/v1/scan/5ebac534954b54139806c112')
+        .get('/scan/5ebac534954b54139806c112')
         .send()
         .expect(httpStatus.NOT_FOUND);
 
@@ -167,7 +167,7 @@ describe('Scan routes', () => {
       };
 
       const res = await request(app)
-        .patch(`/v1/scan/${scan.id}`)
+        .put(`/scan/${scan.id}`)
         .send(updateBody)
         .expect(httpStatus.OK);
 
@@ -195,7 +195,7 @@ describe('Scan routes', () => {
 
     test('should return 404 error if scan is not found', async () => {
       const res = await request(app)
-        .patch('/v1/scan/5ebac534954b54139806c112')
+        .put('/scan/5ebac534954b54139806c112')
         .send({ urls: ['https://example.com'] })
         .expect(httpStatus.NOT_FOUND);
 
@@ -208,7 +208,7 @@ describe('Scan routes', () => {
       const scan = await Scan.create(scanOne);
 
       await request(app)
-        .delete(`/v1/scan/${scan.id}`)
+        .delete(`/scan/${scan.id}`)
         .send()
         .expect(httpStatus.NO_CONTENT);
 
@@ -218,7 +218,7 @@ describe('Scan routes', () => {
 
     test('should return 404 error if scan is not found', async () => {
       const res = await request(app)
-        .delete('/v1/scan/5ebac534954b54139806c112')
+        .delete('/scan/5ebac534954b54139806c112')
         .send()
         .expect(httpStatus.NOT_FOUND);
 

@@ -11,6 +11,7 @@ const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
 const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
+const scanRoute = require('./routes/v1/scan.route');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 
@@ -52,6 +53,9 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
+
+// scan routes (as per original requirements)
+app.use('/scan', scanRoute);
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

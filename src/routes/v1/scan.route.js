@@ -14,7 +14,7 @@ router
 router
   .route('/:scanId')
   .get(validate(scanValidation.getScan), scanController.getScan)
-  .patch(validate(scanValidation.updateScan), scanController.updateScan)
+  .put(validate(scanValidation.updateScan), scanController.updateScan)
   .delete(validate(scanValidation.deleteScan), scanController.deleteScan);
 
 router

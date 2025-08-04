@@ -16,7 +16,7 @@ A Node.js application that scans public websites for accessibility issues using 
 
 ## API Endpoints
 
-### 1. POST /v1/scan
+### 1. POST /scan
 Create a new accessibility scan for the provided URLs.
 
 **Request Body:**
@@ -46,7 +46,7 @@ Create a new accessibility scan for the provided URLs.
 }
 ```
 
-### 2. GET /v1/scan
+### 2. GET /scan
 Get a list of all scans with optional filtering and pagination.
 
 **Query Parameters:**
@@ -54,10 +54,10 @@ Get a list of all scans with optional filtering and pagination.
 - `limit` (number): Number of results per page (default: 10)
 - `status` (string): Filter by status (pending, running, completed, failed)
 
-### 3. GET /v1/scan/:scanId
+### 3. GET /scan/:scanId
 Get a specific scan by its ID.
 
-### 4. PATCH /v1/scan/:scanId
+### 4. PUT /scan/:scanId
 Update an existing scan.
 
 **Request Body:**
@@ -68,13 +68,13 @@ Update an existing scan.
 }
 ```
 
-### 5. DELETE /v1/scan/:scanId
+### 5. DELETE /scan/:scanId
 Delete a specific scan.
 
-### 6. POST /v1/scan/:scanId/execute
+### 6. POST /scan/:scanId/execute
 Execute an accessibility scan for the URLs in the scan.
 
-### 7. GET /v1/scan/:scanId/export
+### 7. GET /scan/:scanId/export
 Export scan results to CSV format.
 
 ## Installation and Setup
@@ -165,7 +165,7 @@ Once the application is running, you can access the interactive API documentatio
 
 ### 1. Create a new scan:
 ```bash
-curl -X POST http://localhost:3000/v1/scan \
+curl -X POST http://localhost:3000/scan \
   -H "Content-Type: application/json" \
   -d '{
     "urls": ["https://example.com", "https://google.com"]
@@ -174,17 +174,17 @@ curl -X POST http://localhost:3000/v1/scan \
 
 ### 2. Execute a scan:
 ```bash
-curl -X POST http://localhost:3000/v1/scan/{scanId}/execute
+curl -X POST http://localhost:3000/scan/{scanId}/execute
 ```
 
 ### 3. Get scan results:
 ```bash
-curl http://localhost:3000/v1/scan/{scanId}
+curl http://localhost:3000/scan/{scanId}
 ```
 
 ### 4. Export results to CSV:
 ```bash
-curl http://localhost:3000/v1/scan/{scanId}/export -o results.csv
+curl http://localhost:3000/scan/{scanId}/export -o results.csv
 ```
 
 ## Project Structure
