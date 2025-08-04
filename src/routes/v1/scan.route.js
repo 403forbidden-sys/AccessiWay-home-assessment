@@ -25,4 +25,8 @@ router
   .route('/:scanId/export')
   .get(validate(scanValidation.exportScan), scanController.exportScanResults);
 
+router
+  .route('/:scanId/download')
+  .get(validate(scanValidation.exportScan), scanController.downloadCSV);
+
 module.exports = router; 

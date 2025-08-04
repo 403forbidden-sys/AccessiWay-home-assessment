@@ -141,4 +141,7 @@ playwright-report/
 test-results.xml
 
 # Puppeteer
-.puppeteer/ 
+.puppeteer/
+
+# Downloads folder
+downloads/ 

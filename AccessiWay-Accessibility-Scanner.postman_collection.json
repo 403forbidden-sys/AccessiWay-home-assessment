@@ -127,11 +127,25 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/v1/scan/{{scanId}}/export",
+          "raw": "{{baseUrl}}/scan/{{scanId}}/export",
           "host": ["{{baseUrl}}"],
-          "path": ["v1", "scan", "{{scanId}}", "export"]
+          "path": ["scan", "{{scanId}}", "export"]
         },
-        "description": "Export scan results to CSV format"
+        "description": "Generate CSV file and save to downloads folder"
+      },
+      "response": []
+    },
+    {
+      "name": "Download CSV File",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/scan/{{scanId}}/download",
+          "host": ["{{baseUrl}}"],
+          "path": ["scan", "{{scanId}}", "download"]
+        },
+        "description": "Download CSV file as attachment"
       },
       "response": []
     }

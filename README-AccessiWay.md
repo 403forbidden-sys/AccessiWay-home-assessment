@@ -75,7 +75,10 @@ Delete a specific scan.
 Execute an accessibility scan for the URLs in the scan.
 
 ### 7. GET /scan/:scanId/export
-Export scan results to CSV format.
+Generate CSV file and save to downloads folder. Returns file path information.
+
+### 8. GET /scan/:scanId/download
+Download CSV file as attachment.
 
 ## Installation and Setup
 
@@ -182,9 +185,14 @@ curl -X POST http://localhost:3000/scan/{scanId}/execute
 curl http://localhost:3000/scan/{scanId}
 ```
 
-### 4. Export results to CSV:
+### 4. Generate CSV file:
 ```bash
-curl http://localhost:3000/scan/{scanId}/export -o results.csv
+curl http://localhost:3000/scan/{scanId}/export
+```
+
+### 5. Download CSV file:
+```bash
+curl http://localhost:3000/scan/{scanId}/download -o results.csv
 ```
 
 ## Project Structure

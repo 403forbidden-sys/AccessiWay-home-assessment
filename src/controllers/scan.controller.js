@@ -36,7 +36,20 @@ const executeScan = catchAsync(async (req, res) => {
 });
 
 const exportScanResults = catchAsync(async (req, res) => {
-  const csv = await scanService.exportToCSV(req.params.scanId);
+  const { csv, filePath } = await scanService.exportToCSV(req.params.scanId);
+  
+  // Send response with file path information
+  res.status(httpStatus.OK).json({
+    message: 'CSV file generated successfully',
+    filePath: filePath,
+    downloadUrl: `/downloads/scan-${req.params.scanId}-results.csv`
+  });
+});
+
+const downloadCSV = catchAsync(async (req, res) => {
+  const { csv } = await scanService.exportToCSV(req.params.scanId);
+  
+  // Send the CSV content as attachment
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', `attachment; filename="scan-${req.params.scanId}-results.csv"`);
   res.send(csv);
@@ -50,4 +63,5 @@ module.exports = {
   deleteScan,
   executeScan,
   exportScanResults,
+  downloadCSV,
 }; 

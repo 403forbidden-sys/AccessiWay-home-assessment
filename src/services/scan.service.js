@@ -1,6 +1,8 @@
 const httpStatus = require('http-status');
 const puppeteer = require('puppeteer');
 const axe = require('axe-core');
+const fs = require('fs');
+const path = require('path');
 const Scan = require('../models/scan.model');
 const ApiError = require('../utils/ApiError');
 const logger = require('../config/logger');
@@ -209,7 +211,7 @@ const executeScan = async (scanId) => {
 /**
  * Export scan results to CSV
  * @param {ObjectId} scanId
- * @returns {Promise<string>}
+ * @returns {Promise<{csv: string, filePath: string}>}
  */
 const exportToCSV = async (scanId) => {
   const scan = await getScanById(scanId);
@@ -229,7 +231,23 @@ const exportToCSV = async (scanId) => {
     csv += `"${result.url}","${result.timestamp}","${violations}","${passes}","${inapplicable}","${incomplete}"\n`;
   }
 
-  return csv;
+  // Create downloads directory if it doesn't exist
+  const downloadsDir = path.join(process.cwd(), 'downloads');
+  if (!fs.existsSync(downloadsDir)) {
+    fs.mkdirSync(downloadsDir, { recursive: true });
+  }
+
+  // Generate filename with timestamp
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `scan-${scanId}-${timestamp}.csv`;
+  const filePath = path.join(downloadsDir, filename);
+
+  // Write CSV to file
+  fs.writeFileSync(filePath, csv, 'utf8');
+  
+  logger.info(`CSV file saved to: ${filePath}`);
+
+  return { csv, filePath };
 };
 
 module.exports = {
