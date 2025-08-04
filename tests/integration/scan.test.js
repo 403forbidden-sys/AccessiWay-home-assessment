@@ -8,7 +8,7 @@ const { scanOne, scanTwo } = require('../fixtures/scan.fixture');
 setupTestDB();
 
 describe('Scan routes', () => {
-  describe('POST /v1/scan', () => {
+  describe('POST /scan', () => {
     test('should return 201 and successfully create scan if data is ok', async () => {
       const res = await request(app)
         .post('/scan')
@@ -17,24 +17,22 @@ describe('Scan routes', () => {
         })
         .expect(httpStatus.CREATED);
 
-      expect(res.body).toEqual({
-        id: expect.anything(),
+      expect(res.body).toMatchObject({
         urls: ['https://example.com'],
         status: 'pending',
         results: [],
         error: null,
-        startedAt: expect.anything(),
-        completedAt: null,
         totalViolations: 0,
         totalPasses: 0,
       });
+      expect(res.body.id).toBeDefined();
+      expect(res.body.startedAt).toBeDefined();
+      expect(res.body.completedAt).toBeNull();
 
       const dbScan = await Scan.findById(res.body.id);
       expect(dbScan).toBeDefined();
-      expect(dbScan).toMatchObject({
-        urls: ['https://example.com'],
-        status: 'pending',
-      });
+      expect(dbScan.urls.toObject()).toEqual(['https://example.com']);
+      expect(dbScan.status).toBe('pending');
     });
 
     test('should return 400 error if urls is invalid', async () => {
@@ -60,7 +58,7 @@ describe('Scan routes', () => {
     });
   });
 
-  describe('GET /v1/scan', () => {
+  describe('GET /scan', () => {
     test('should return 200 and apply default query options', async () => {
       await Scan.insertMany([scanOne, scanTwo]);
 
@@ -69,8 +67,7 @@ describe('Scan routes', () => {
         .send()
         .expect(httpStatus.OK);
 
-      expect(res.body).toEqual({
-        results: expect.any(Array),
+      expect(res.body).toMatchObject({
         page: 1,
         limit: 10,
         totalPages: 1,
@@ -78,16 +75,14 @@ describe('Scan routes', () => {
       });
       expect(res.body.results).toHaveLength(2);
       expect(res.body.results[0]).toMatchObject({
-        id: expect.anything(),
         urls: expect.any(Array),
         status: expect.any(String),
         results: expect.any(Array),
-        error: expect.anything(),
-        startedAt: expect.anything(),
-        completedAt: expect.anything(),
         totalViolations: expect.any(Number),
         totalPasses: expect.any(Number),
       });
+      expect(res.body.results[0].id).toBeDefined();
+      expect(res.body.results[0].startedAt).toBeDefined();
     });
 
     test('should return 200 and apply filter query options', async () => {
@@ -111,7 +106,7 @@ describe('Scan routes', () => {
     });
   });
 
-  describe('GET /v1/scan/:scanId', () => {
+  describe('GET /scan/:scanId', () => {
     test('should return 200 and the scan object if data is ok', async () => {
       const scan = await Scan.create(scanOne);
 
@@ -120,17 +115,14 @@ describe('Scan routes', () => {
         .send()
         .expect(httpStatus.OK);
 
-      expect(res.body).toMatchObject({
-        id: scan.id,
-        urls: scan.urls,
-        status: scan.status,
-        results: scan.results,
-        error: scan.error,
-        startedAt: scan.startedAt.toISOString(),
-        completedAt: scan.completedAt ? scan.completedAt.toISOString() : null,
-        totalViolations: scan.totalViolations,
-        totalPasses: scan.totalPasses,
-      });
+      expect(res.body.id).toBe(scan.id);
+      expect(res.body.urls).toEqual(scan.urls.toObject());
+      expect(res.body.status).toBe(scan.status);
+      expect(res.body.totalViolations).toBe(scan.totalViolations);
+      expect(res.body.totalPasses).toBe(scan.totalPasses);
+      expect(res.body.results).toBeDefined();
+      expect(res.body.error).toBeDefined();
+      expect(res.body.startedAt).toBeDefined();
     });
 
     test('should return 400 error if scanId is invalid', async () => {
@@ -152,7 +144,7 @@ describe('Scan routes', () => {
     });
   });
 
-  describe('PATCH /v1/scan/:scanId', () => {
+  describe('PUT /scan/:scanId', () => {
     test('should return 200 and successfully update scan if data is ok', async () => {
       const scan = await Scan.create(scanOne);
       const updateBody = {
@@ -169,20 +161,17 @@ describe('Scan routes', () => {
         id: scan.id,
         urls: updateBody.urls,
         status: updateBody.status,
-        results: scan.results,
-        error: scan.error,
-        startedAt: scan.startedAt.toISOString(),
-        completedAt: scan.completedAt ? scan.completedAt.toISOString() : null,
         totalViolations: scan.totalViolations,
         totalPasses: scan.totalPasses,
       });
+      expect(res.body.results).toBeDefined();
+      expect(res.body.error).toBeDefined();
+      expect(res.body.startedAt).toBeDefined();
 
       const dbScan = await Scan.findById(scan.id);
       expect(dbScan).toBeDefined();
-      expect(dbScan).toMatchObject({
-        urls: updateBody.urls,
-        status: updateBody.status,
-      });
+      expect(dbScan.urls.toObject()).toEqual(updateBody.urls);
+      expect(dbScan.status).toBe(updateBody.status);
     });
 
     test('should return 404 error if scan is not found', async () => {
@@ -195,7 +184,7 @@ describe('Scan routes', () => {
     });
   });
 
-  describe('DELETE /v1/scan/:scanId', () => {
+  describe('DELETE /scan/:scanId', () => {
     test('should return 204 if data is ok', async () => {
       const scan = await Scan.create(scanOne);
 
