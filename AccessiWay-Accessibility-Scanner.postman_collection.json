@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "AccessiWay Accessibility Scanner API",
+    "description": "API collection for the AccessiWay accessibility scanner application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Scan",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"urls\": [\n    \"https://example.com\",\n    \"https://google.com\"\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan"]
+        },
+        "description": "Create a new accessibility scan for the provided URLs"
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Scans",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan?page=1&limit=10&status=completed",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "status",
+              "value": "completed"
+            }
+          ]
+        },
+        "description": "Get a list of all scans with optional filtering and pagination"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Scan by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan/{{scanId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan", "{{scanId}}"]
+        },
+        "description": "Get a specific scan by its ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Scan",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"urls\": [\n    \"https://updated-example.com\",\n    \"https://github.com\"\n  ],\n  \"status\": \"pending\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan/{{scanId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan", "{{scanId}}"]
+        },
+        "description": "Update an existing scan"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Scan",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan/{{scanId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan", "{{scanId}}"]
+        },
+        "description": "Delete a specific scan"
+      },
+      "response": []
+    },
+    {
+      "name": "Execute Scan",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan/{{scanId}}/execute",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan", "{{scanId}}", "execute"]
+        },
+        "description": "Execute an accessibility scan for the URLs in the scan"
+      },
+      "response": []
+    },
+    {
+      "name": "Export Scan Results",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/v1/scan/{{scanId}}/export",
+          "host": ["{{baseUrl}}"],
+          "path": ["v1", "scan", "{{scanId}}", "export"]
+        },
+        "description": "Export scan results to CSV format"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "scanId",
+      "value": "your-scan-id-here",
+      "type": "string"
+    }
+  ]
+} 
