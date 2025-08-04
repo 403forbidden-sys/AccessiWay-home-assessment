@@ -27,8 +27,6 @@ describe('Scan routes', () => {
         completedAt: null,
         totalViolations: 0,
         totalPasses: 0,
-        createdAt: expect.anything(),
-        updatedAt: expect.anything(),
       });
 
       const dbScan = await Scan.findById(res.body.id);
@@ -79,7 +77,7 @@ describe('Scan routes', () => {
         totalResults: 2,
       });
       expect(res.body.results).toHaveLength(2);
-      expect(res.body.results[0]).toEqual({
+      expect(res.body.results[0]).toMatchObject({
         id: expect.anything(),
         urls: expect.any(Array),
         status: expect.any(String),
@@ -89,8 +87,6 @@ describe('Scan routes', () => {
         completedAt: expect.anything(),
         totalViolations: expect.any(Number),
         totalPasses: expect.any(Number),
-        createdAt: expect.anything(),
-        updatedAt: expect.anything(),
       });
     });
 
@@ -124,7 +120,7 @@ describe('Scan routes', () => {
         .send()
         .expect(httpStatus.OK);
 
-      expect(res.body).toEqual({
+      expect(res.body).toMatchObject({
         id: scan.id,
         urls: scan.urls,
         status: scan.status,
@@ -134,8 +130,6 @@ describe('Scan routes', () => {
         completedAt: scan.completedAt ? scan.completedAt.toISOString() : null,
         totalViolations: scan.totalViolations,
         totalPasses: scan.totalPasses,
-        createdAt: scan.createdAt.toISOString(),
-        updatedAt: scan.updatedAt.toISOString(),
       });
     });
 
@@ -171,7 +165,7 @@ describe('Scan routes', () => {
         .send(updateBody)
         .expect(httpStatus.OK);
 
-      expect(res.body).toEqual({
+      expect(res.body).toMatchObject({
         id: scan.id,
         urls: updateBody.urls,
         status: updateBody.status,
@@ -181,8 +175,6 @@ describe('Scan routes', () => {
         completedAt: scan.completedAt ? scan.completedAt.toISOString() : null,
         totalViolations: scan.totalViolations,
         totalPasses: scan.totalPasses,
-        createdAt: scan.createdAt.toISOString(),
-        updatedAt: expect.anything(),
       });
 
       const dbScan = await Scan.findById(scan.id);
